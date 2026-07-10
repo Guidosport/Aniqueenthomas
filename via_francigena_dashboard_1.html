@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Via Francigena — Anique &amp; Thomas</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --a:#2563eb;--a-soft:rgba(37,99,235,.12);
+  --t:#059669;--t-soft:rgba(5,150,105,.12);
+  --ink:#0b0b0b;--muted:#888780;--sub:#52514e;
+  --card:#ffffff;--bg:#f5f4f0;--line:rgba(11,11,11,.10);--r:12px
+}
+@media(prefers-color-scheme:dark){
+  :root{--ink:#fff;--muted:#898781;--sub:#c3c2b7;--card:#1f1f1d;--bg:#141413;--line:rgba(255,255,255,.10)}
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);-webkit-text-size-adjust:100%}
+.app{max-width:430px;margin:0 auto;min-height:100vh;padding-bottom:2rem}
+
+.hero{padding:1.25rem 1rem 1rem;background:var(--card);border-bottom:0.5px solid var(--line)}
+.eyebrow{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+h1{font-size:24px;font-weight:600;line-height:1.15;margin-bottom:2px}
+.hero-sub{font-size:13px;color:var(--sub);margin-bottom:1rem}
+.pshell{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:4px}
+.pfill{height:8px;border-radius:4px;background:linear-gradient(90deg,var(--a),var(--t))}
+.plabels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
+
+.tabs{display:flex;background:var(--card);border-bottom:0.5px solid var(--line);position:sticky;top:0;z-index:10}
+.tb{flex:1;padding:12px 4px;font-size:11px;font-weight:500;color:var(--muted);background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;-webkit-tap-highlight-color:transparent}
+.tb.on{color:var(--ink);border-bottom-color:var(--ink)}
+
+.panel{display:none;padding:.875rem 1rem}
+.panel.on{display:block}
+
+.legend{display:flex;gap:16px;margin-bottom:.875rem}
+.leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--sub)}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+
+.scoreboard{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;background:var(--card);border:0.5px solid var(--line);border-radius:var(--r);padding:1rem;margin-bottom:.75rem}
+.sbn{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.sbkm{font-size:38px;font-weight:600;line-height:1}
+.sbu{font-size:13px;color:var(--sub)}
+.diff{font-size:11px;font-weight:600;color:var(--a);background:var(--a-soft);padding:3px 8px;border-radius:20px}
+
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:.75rem}
+.sc{background:var(--card);border:0.5px solid var(--line);border-radius:var(--r);padding:.75rem}
+.scl{font-size:10px;color:var(--muted);margin-bottom:5px;line-height:1.3}
+.scp{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.sva{font-size:17px;font-weight:600;color:var(--a)}
+.svt{font-size:17px;font-weight:600;color:var(--t)}
+.wbadge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;display:inline-block}
+.wa{background:var(--a-soft);color:var(--a)}.wt{background:var(--t-soft);color:var(--t)}
+
+.cbox{background:var(--card);border:0.5px solid var(--line);border-radius:var(--r);padding:.875rem;margin-bottom:.75rem}
+.ct{font-size:11px;color:var(--muted);margin-bottom:.625rem}
+.cbox svg{width:100%;height:auto;display:block}
+
+.sec{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:1rem 0 .625rem;padding-bottom:4px;border-bottom:0.5px solid var(--line)}
+
+.co{background:var(--card);border-left:3px solid var(--a);border-radius:0 8px 8px 0;padding:.625rem .75rem;margin-bottom:6px;font-size:12px;color:var(--sub);line-height:1.5}
+.co strong{color:var(--ink);font-weight:600}
+.co.gr{border-left-color:var(--t)}
+
+.zstack{display:flex;height:20px;border-radius:4px;overflow:hidden;margin-bottom:5px}
+.zseg{height:100%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:rgba(255,255,255,.9)}
+.zkey{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-top:6px}
+.zk{text-align:center;font-size:9px;color:var(--muted);line-height:1.4}
+
+.ctlg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:.75rem}
+.ctlc{background:var(--card);border:0.5px solid var(--line);border-radius:var(--r);padding:.75rem}
+.ctln{font-size:11px;font-weight:600;margin-bottom:7px}
+.ctlr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.ctlk{font-size:11px;color:var(--muted)}
+.ctlv{font-size:13px;font-weight:600}
+.neg{color:#e34948}
+.bw{height:5px;background:var(--line);border-radius:3px;margin-top:2px;overflow:hidden}
+.bf{height:5px;border-radius:3px}
+
+.scorebar{display:flex;align-items:center;gap:10px;background:var(--card);border:0.5px solid var(--line);border-radius:var(--r);padding:.75rem 1rem;margin-bottom:.75rem}
+.chip{font-size:28px;font-weight:700;line-height:1}
+
+table{width:100%;border-collapse:collapse;font-size:12px}
+tr{border-bottom:0.5px solid var(--line)}
+tr:last-child{border-bottom:none}
+td{padding:7px 3px;vertical-align:middle}
+.m{color:var(--sub);font-size:11px}
+.va{color:var(--a);font-weight:600;text-align:center}
+.vt{color:var(--t);font-weight:600;text-align:center}
+.bdg{font-size:9px;padding:2px 6px;border-radius:20px;font-weight:600;white-space:nowrap}
+
+.footer{text-align:center;font-size:10px;color:var(--muted);padding:.75rem 1rem;border-top:0.5px solid var(--line);margin-top:.5rem;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="hero">
+  <p class="eyebrow">Via Francigena · Utrecht → Rome</p>
+  <h1>58 dagen,<br>2.314 km samen</h1>
+  <p class="hero-sub">Stand van zaken · 10 juli 2026</p>
+  <div class="pshell"><div class="pfill" style="width:53%"></div></div>
+  <div class="plabels"><span>Utrecht</span><span>~53% naar Rome</span><span>Rome</span></div>
+</div>
+
+<div class="tabs">
+  <button class="tb on" onclick="show('t1',this)">Overzicht</button>
+  <button class="tb" onclick="show('t2',this)">Stats</button>
+  <button class="tb" onclick="show('t3',this)">Conditie</button>
+  <button class="tb" onclick="show('t4',this)">Battle</button>
+</div>
+
+<!-- ═══ OVERZICHT ═══ -->
+<div id="t1" class="panel on">
+  <div class="legend">
+    <span class="leg"><span class="dot" style="background:var(--a)"></span>Anique</span>
+    <span class="leg"><span class="dot" style="background:var(--t)"></span>Thomas</span>
+  </div>
+  <div class="scoreboard">
+    <div style="text-align:center">
+      <div class="sbn" style="color:var(--a)">Anique</div>
+      <div><span class="sbkm">1163</span><span class="sbu"> km</span></div>
+    </div>
+    <div style="text-align:center">
+      <div class="diff">+12,5 km</div>
+      <div style="font-size:9px;color:var(--muted);margin-top:3px">voorsprong</div>
+    </div>
+    <div style="text-align:center">
+      <div class="sbn" style="color:var(--t)">Thomas</div>
+      <div><span class="sbkm">1151</span><span class="sbu"> km</span></div>
+    </div>
+  </div>
+
+  <div class="cbox">
+    <p class="ct">Cumulatieve afstand (km) · 13 mei — 9 juli</p>
+    <svg viewBox="0 0 400 200" id="svgCum"></svg>
+  </div>
+
+  <div class="g3">
+    <div class="sc"><div class="scl">Wandeldagen</div><div class="scp"><span class="sva">46</span><span class="svt">48</span></div><span class="wbadge wt">Thomas</span></div>
+    <div class="sc"><div class="scl">Gem. km/dag</div><div class="scp"><span class="sva">25,3</span><span class="svt">24,0</span></div><span class="wbadge wa">Anique</span></div>
+    <div class="sc"><div class="scl">Samen verbrand</div><div style="font-size:15px;font-weight:600;margin:3px 0 2px">251.669</div><div style="font-size:10px;color:var(--muted)">calorieën</div></div>
+  </div>
+
+  <div class="co"><strong>Langste dag ooit:</strong> 3 juli — Anique 41,6 km · Thomas 41,7 km. Slechts 100 meter verschil na een hele dag lopen.</div>
+  <div class="co gr"><strong>Pauze 9–18 juni</strong> — beiden keerden tijdelijk terug naar huis en startten op 19 juni opnieuw.</div>
+</div>
+
+<!-- ═══ STATS ═══ -->
+<div id="t2" class="panel">
+  <div class="legend">
+    <span class="leg"><span class="dot" style="background:var(--a)"></span>Anique</span>
+    <span class="leg"><span class="dot" style="background:var(--t)"></span>Thomas</span>
+  </div>
+  <p class="sec">Afstand &amp; Tijd</p>
+  <div class="g2">
+    <div class="sc"><div class="scl">Totale afstand</div><div class="scp"><span class="sva">1163 km</span><span class="svt">1151 km</span></div><span class="wbadge wa">Anique</span></div>
+    <div class="sc"><div class="scl">Bewegingstijd</div><div class="scp"><span class="sva">318 u</span><span class="svt">235 u</span></div><span class="wbadge wa">Anique</span></div>
+    <div class="sc"><div class="scl">Loopsnelheid (km/u)</div><div class="scp"><span class="sva">3,65</span><span class="svt">4,89</span></div><span class="wbadge wt">Thomas</span></div>
+    <div class="sc"><div class="scl">Uren per loopdag</div><div class="scp"><span class="sva">6,9 u</span><span class="svt">4,9 u</span></div><span class="wbadge wa">Anique</span></div>
+  </div>
+  <p class="sec">Hoogtemeters</p>
+  <div class="g2">
+    <div class="sc"><div class="scl">Totaal geklommen (m)</div><div class="scp"><span class="sva">10.607</span><span class="svt">11.806</span></div><span class="wbadge wt">Thomas</span></div>
+    <div class="sc"><div class="scl">Hoogtemeters/dag</div><div class="scp"><span class="sva">231 m</span><span class="svt">246 m</span></div><span class="wbadge wt">Thomas</span></div>
+  </div>
+  <div class="co gr"><strong>Zwaarste dag:</strong> Anique 1.829 m hoogtemeters op 9 juli — de Alpen zijn begonnen.</div>
+  <p class="sec">Hartslag</p>
+  <div class="g2">
+    <div class="sc"><div class="scl">Gem. hartslag</div><div class="scp"><span class="sva">101 bpm</span><span class="svt">106 bpm</span></div><span class="wbadge wa">Anique</span></div>
+    <div class="sc"><div class="scl">LTHR (drempel, bpm)</div><div class="scp"><span class="sva">172</span><span class="svt">174</span></div></div>
+  </div>
+  <div class="cbox">
+    <p class="ct">Gem. hartslag per week (bpm)</p>
+    <svg viewBox="0 0 400 170" id="svgHR"></svg>
+  </div>
+  <p class="sec">Hartslagzones — % van totale tijd</p>
+  <div class="sc" style="margin-bottom:.75rem">
+    <div style="font-size:11px;color:var(--sub);margin-bottom:6px">Anique (314 uur HR-data)</div>
+    <div class="zstack"><div class="zseg" style="width:99.2%;background:#2563eb">Z1 · 99,2%</div><div class="zseg" style="width:.8%;background:#7c3aed"></div></div>
+    <div style="font-size:11px;color:var(--sub);margin:10px 0 6px">Thomas (232 uur HR-data)</div>
+    <div class="zstack"><div class="zseg" style="width:99.3%;background:#059669">Z1 · 99,3%</div><div class="zseg" style="width:.7%;background:#0891b2"></div></div>
+    <div class="zkey">
+      <div class="zk">Z1 &lt;145<br>99%+</div><div class="zk">Z2 145–153<br>~0,5%</div><div class="zk">Z3 153–162<br>0,2%</div><div class="zk">Z4+ &gt;162<br>&lt;0,1%</div>
+    </div>
+  </div>
+  <div class="co">99%+ in Z1 — textboek voor ultra-afstand. Het lichaam past zich optimaal aan als je laag blijft.</div>
+  <p class="sec">Trainingslast per week</p>
+  <div class="cbox">
+    <svg viewBox="0 0 400 180" id="svgTL"></svg>
+  </div>
+</div>
+
+<!-- ═══ CONDITIE ═══ -->
+<div id="t3" class="panel">
+  <div class="legend">
+    <span class="leg"><span class="dot" style="background:var(--a)"></span>Anique</span>
+    <span class="leg"><span class="dot" style="background:var(--t)"></span>Thomas</span>
+  </div>
+  <p class="sec">Intensiteitsfactor (IF)</p>
+  <div class="co" style="margin-bottom:.75rem">IF combineert tempo, duur en hartslag. Hoger = zwaardere etappe. Wandel-equivalent van de wielren-IF.</div>
+  <div class="g2">
+    <div class="sc"><div class="scl">Gem. IF</div><div class="scp"><span class="sva">35,8</span><span class="svt">33,6</span></div><span class="wbadge wa">Anique zwaarder</span></div>
+    <div class="sc"><div class="scl">Max IF (zwaarste dag)</div><div class="scp"><span class="sva">56,4</span><span class="svt">43,9</span></div><span class="wbadge wa">Anique</span></div>
+    <div class="sc"><div class="scl">Min IF (rustigste dag)</div><div class="scp"><span class="sva">27,9</span><span class="svt">20,1</span></div><span class="wbadge wt">Thomas rustiger</span></div>
+    <div class="sc"><div class="scl">Totale trainingslast</div><div class="scp"><span class="sva">4.805</span><span class="svt">4.179</span></div><span class="wbadge wa">Anique</span></div>
+  </div>
+  <div class="cbox">
+    <p class="ct">IF per week</p>
+    <svg viewBox="0 0 400 160" id="svgIF"></svg>
+  </div>
+  <p class="sec">Fitnessontwikkeling — CTL opbouw</p>
+  <div class="co" style="margin-bottom:.75rem"><strong>CTL</strong> = chronic training load = fitheid. Hoe hoger, hoe beter getraind. Beiden zijn fitter dan ooit.</div>
+  <div class="cbox">
+    <p class="ct">CTL (fitheid) — opbouw door de tocht</p>
+    <svg viewBox="0 0 400 180" id="svgCTL"></svg>
+  </div>
+  <p class="sec">Huidige stand — 9 juli</p>
+  <div class="ctlg">
+    <div class="ctlc">
+      <div class="ctln" style="color:var(--a)">Anique</div>
+      <div class="ctlr"><span class="ctlk">CTL (fitheid)</span><span class="ctlv" style="color:var(--a)">68</span></div>
+      <div class="bw"><div class="bf" style="width:85%;background:var(--a)"></div></div>
+      <div class="ctlr" style="margin-top:6px"><span class="ctlk">ATL (moeheid)</span><span class="ctlv">116</span></div>
+      <div class="bw"><div class="bf" style="width:100%;background:#f59e0b"></div></div>
+      <div class="ctlr" style="margin-top:6px"><span class="ctlk">TSB (vorm)</span><span class="ctlv neg">−48</span></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:5px;line-height:1.4">Diep in het rood. Fitter dan ooit, maar uitgeput.</div>
+    </div>
+    <div class="ctlc">
+      <div class="ctln" style="color:var(--t)">Thomas</div>
+      <div class="ctlr"><span class="ctlk">CTL (fitheid)</span><span class="ctlv" style="color:var(--t)">58</span></div>
+      <div class="bw"><div class="bf" style="width:72%;background:var(--t)"></div></div>
+      <div class="ctlr" style="margin-top:6px"><span class="ctlk">ATL (moeheid)</span><span class="ctlv">92</span></div>
+      <div class="bw"><div class="bf" style="width:79%;background:#f59e0b"></div></div>
+      <div class="ctlr" style="margin-top:6px"><span class="ctlk">TSB (vorm)</span><span class="ctlv neg">−33</span></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:5px;line-height:1.4">Minder diep in het rood. Iets frisser.</div>
+    </div>
+  </div>
+  <div class="co gr"><strong>CTL-groei:</strong> Anique +56 punten (12→68) · Thomas +45 punten (13→58). Uitzonderlijke conditieopbouw in 58 dagen.</div>
+</div>
+
+<!-- ═══ BATTLE ═══ -->
+<div id="t4" class="panel">
+  <div class="scorebar">
+    <div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:3px">Totaalscore</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="chip" style="color:var(--a)">8</span>
+        <span style="font-size:18px;color:var(--muted)">–</span>
+        <span class="chip" style="color:var(--t)">6</span>
+      </div>
+    </div>
+    <div style="flex:1;padding-left:12px;border-left:0.5px solid var(--line)">
+      <div style="font-size:13px;font-weight:600">Anique wint</div>
+      <div style="font-size:10px;color:var(--muted)">op 14 meetpunten</div>
+    </div>
+  </div>
+  <div class="legend">
+    <span class="leg"><span class="dot" style="background:var(--a)"></span>Anique</span>
+    <span class="leg"><span class="dot" style="background:var(--t)"></span>Thomas</span>
+  </div>
+  <div class="sc" style="margin-bottom:.75rem">
+    <table>
+      <thead>
+        <tr>
+          <td style="font-size:10px;color:var(--muted)">Meting</td>
+          <td style="font-size:10px;color:var(--a);text-align:center">Anique</td>
+          <td style="font-size:10px;color:var(--t);text-align:center">Thomas</td>
+          <td></td>
+        </tr>
+      </thead>
+      <tbody id="battleRows"></tbody>
+    </table>
+  </div>
+  <div class="co"><strong>Snelheid vs. duur:</strong> Thomas loopt 34% sneller (4,89 vs 3,65 km/u). Anique loopt ~2 uur langer per dag. Vandaar haar grotere totale afstand.</div>
+  <div class="co gr"><strong>Efficiëntie:</strong> Anique verbrandt 7 cal/km minder (105 vs 112) — beter getraind aerobsysteem.</div>
+  <div class="co"><strong>Conditie:</strong> Anique's CTL 68 vs Thomas 58 — harder getraind, maar ook dieper in de moeheid (TSB −48 vs −33).</div>
+</div>
+
+<div class="footer">
+  Data: Intervals.icu · Anique (i139167) &amp; Thomas (i207790)<br>
+  Gegenereerd 10 juli 2026 · Via Francigena GR 145
+</div>
+
+</div>
+
+<script>
+function show(id,btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tb').forEach(b=>b.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  btn.classList.add('on');
+}
+
+// ── Mini SVG chart library (geen externe dependencies) ──
+const NS='http://www.w3.org/2000/svg';
+const dk=matchMedia('(prefers-color-scheme:dark)').matches;
+const GRID=dk?'rgba(255,255,255,.08)':'rgba(0,0,0,.07)';
+const TICK='#898781';
+const CA='#2563eb',CT='#059669';
+
+function el(tag,attrs){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e}
+
+function lineChart(svgId,labels,seriesList,yMin,yMax,ySuffix,fillAlpha){
+  const svg=document.getElementById(svgId);
+  const vb=svg.getAttribute('viewBox').split(' ');
+  const W=+vb[2],H=+vb[3];
+  const padL=38,padR=8,padT=8,padB=22;
+  const iw=W-padL-padR,ih=H-padT-padB;
+  const n=labels.length;
+  const x=i=>padL+i/(n-1)*iw;
+  const y=v=>padT+ih-(v-yMin)/(yMax-yMin)*ih;
+  // gridlines + y labels
+  const steps=4;
+  for(let s=0;s<=steps;s++){
+    const v=yMin+(yMax-yMin)*s/steps;
+    const yy=y(v);
+    svg.appendChild(el('line',{x1:padL,x2:W-padR,y1:yy,y2:yy,stroke:GRID,'stroke-width':1}));
+    const t=el('text',{x:padL-5,y:yy+3,'text-anchor':'end','font-size':9,fill:TICK});
+    t.textContent=Math.round(v)+(ySuffix||'');
+    svg.appendChild(t);
+  }
+  // x labels (max ~8)
+  const skip=Math.ceil(n/8);
+  labels.forEach((lb,i)=>{
+    if(i%skip!==0&&i!==n-1)return;
+    const t=el('text',{x:x(i),y:H-6,'text-anchor':'middle','font-size':9,fill:TICK});
+    t.textContent=lb;svg.appendChild(t);
+  });
+  // series
+  seriesList.forEach(s=>{
+    const pts=s.data.map((v,i)=>x(i)+','+y(v)).join(' ');
+    if(fillAlpha){
+      const area='M'+x(0)+','+y(s.data[0])+' '+s.data.map((v,i)=>'L'+x(i)+','+y(v)).join(' ')+' L'+x(n-1)+','+(padT+ih)+' L'+x(0)+','+(padT+ih)+' Z';
+      svg.appendChild(el('path',{d:area,fill:s.color,opacity:fillAlpha,stroke:'none'}));
+    }
+    svg.appendChild(el('polyline',{points:pts,fill:'none',stroke:s.color,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'}));
+    if(s.dots){
+      s.data.forEach((v,i)=>svg.appendChild(el('circle',{cx:x(i),cy:y(v),r:2.6,fill:s.color})));
+    }
+  });
+}
+
+function barChart(svgId,labels,seriesList,yMax){
+  const svg=document.getElementById(svgId);
+  const vb=svg.getAttribute('viewBox').split(' ');
+  const W=+vb[2],H=+vb[3];
+  const padL=34,padR=6,padT=8,padB=22;
+  const iw=W-padL-padR,ih=H-padT-padB;
+  const n=labels.length;
+  const groupW=iw/n;
+  const barW=Math.min(11,groupW/3);
+  const y=v=>padT+ih-v/yMax*ih;
+  const steps=4;
+  for(let s=0;s<=steps;s++){
+    const v=yMax*s/steps;
+    const yy=y(v);
+    svg.appendChild(el('line',{x1:padL,x2:W-padR,y1:yy,y2:yy,stroke:GRID,'stroke-width':1}));
+    const t=el('text',{x:padL-5,y:yy+3,'text-anchor':'end','font-size':9,fill:TICK});
+    t.textContent=Math.round(v);svg.appendChild(t);
+  }
+  labels.forEach((lb,i)=>{
+    const cx=padL+groupW*i+groupW/2;
+    const t=el('text',{x:cx,y:H-6,'text-anchor':'middle','font-size':9,fill:TICK});
+    t.textContent=lb;svg.appendChild(t);
+    seriesList.forEach((s,si)=>{
+      const v=s.data[i];
+      const bx=cx-barW+si*(barW+2);
+      svg.appendChild(el('rect',{x:bx,y:y(v),width:barW,height:padT+ih-y(v),rx:2,fill:s.color,opacity:.8}));
+    });
+  });
+}
+
+// ── DATA ──
+const dL=['13/5','17/5','21/5','25/5','29/5','2/6','6/6','10/6','14/6','18/6','22/6','26/6','30/6','4/7','9/7'];
+const cA=[40.9,132.8,234.2,332.5,430.1,500.6,611.2,649.7,649.7,649.7,742.1,862.1,960.2,1053.3,1163.3];
+const cT=[20.9,113.6,216.2,314.5,410.7,486.0,595.4,633.8,633.8,642.4,733.4,852.9,953.6,1064.3,1150.8];
+
+lineChart('svgCum',dL,[
+  {data:cA,color:CA},
+  {data:cT,color:CT}
+],0,1300,'',0.06);
+
+const wL=['W20','W21','W22','W23','W24','W25','W26','W27','W28'];
+const hrA=[101,100,102,94,99,113,103,97,105];
+const hrT=[106,107,108,102,107,106,107,102,109];
+lineChart('svgHR',wL,[
+  {data:hrA,color:CA,dots:true},
+  {data:hrT,color:CT,dots:true}
+],88,118,'',0);
+
+const tlA=[481,629,628,537,38,384,879,696,533];
+const tlT=[419,690,632,481,45,266,719,634,293];
+barChart('svgTL',wL,[
+  {data:tlA,color:CA},
+  {data:tlT,color:CT}
+],900);
+
+const ifA=[34.5,32.3,36.1,33.1,34.3,45.3,37.8,34.8,41.3];
+const ifT=[34.1,33.0,33.4,32.4,30.5,35.9,34.4,31.1,37.2];
+lineChart('svgIF',wL,[
+  {data:ifA,color:CA,dots:true},
+  {data:ifT,color:CT,dots:true}
+],20,58,'',0.07);
+
+const ctlL=['13/5','20/5','27/5','3/6','8/6','19/6','26/6','3/7','9/7'];
+const ctlA=[12,24,34,44,44,42,53,60,68];
+const ctlT=[13,27,36,45,45,37,48,53,58];
+lineChart('svgCTL',ctlL,[
+  {data:ctlA,color:CA,dots:true},
+  {data:ctlT,color:CT,dots:true}
+],0,80,'',0.08);
+
+// Battle table
+const rows=[
+  ['Totale afstand','1.163 km','1.151 km',true],
+  ['Gem. km/loopdag','25,3 km','24,0 km',true],
+  ['Wandeldagen','46','48',false],
+  ['Bewegingstijd','318 uur','235 uur',true],
+  ['Loopsnelheid','3,65 km/u','4,89 km/u',false],
+  ['Langste dag','41,6 km','41,7 km',false],
+  ['Hoogtemeters','10.607 m','11.806 m',false],
+  ['Gem. hartslag','101 bpm','106 bpm',true],
+  ['Calorieën/km','105','112',true],
+  ['Gem. IF','35,8','33,6',true],
+  ['Max IF','56,4','43,9',true],
+  ['Trainingslast','4.805','4.179',true],
+  ['CTL (fitheid)','68','58',true],
+  ['TSB (vorm)','−48','−33',false],
+];
+const tb=document.getElementById('battleRows');
+rows.forEach(([l,va,vt,wA])=>{
+  const b=wA?'<span class="bdg wa">Anique</span>':'<span class="bdg wt">Thomas</span>';
+  const tr=document.createElement('tr');
+  tr.innerHTML='<td class="m">'+l+'</td><td class="va"'+(wA?' style="font-weight:700"':'')+'>'+va+'</td><td class="vt"'+(!wA?' style="font-weight:700"':'')+'>'+vt+'</td><td style="text-align:center">'+b+'</td>';
+  tb.appendChild(tr);
+});
+</script>
+</body>
+</html>
